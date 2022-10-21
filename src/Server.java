@@ -19,11 +19,11 @@ public class Server {
         }
         
     }
-    public String pass(Client Pass){
+    public boolean pass(Client Pass){
         if (Pass.getPassword().equals(this.senha)) {
-            return "Loggin user";
+            return true;
         }else{
-            return "Senha errada";
+            return false;
         }
        
     }
@@ -74,10 +74,6 @@ public class Server {
 
 
     }
-
-    
-
-
 
 
 }
