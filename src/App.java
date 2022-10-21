@@ -131,7 +131,10 @@ public class App {
                     if ("quit".equals(comand)) {
                         System.out.println("bye!");
                         break;
-                    }else{
+                    }else if("".equals(comand)){
+                        //nada
+                    }
+                    else{
                         System.out.println("Command not found");
                     }
                 }
