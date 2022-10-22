@@ -4,10 +4,17 @@ public class Server {
     public String endereco = "pop.mail.com";
     public String porta = "110";
 
-    public int n = 3;
+    public int n = 4;
     public String[] lista = new String[n];
     
-   
+     public String emails(int n){
+        this.lista[0] = "Assunto: oi, como vai?\nOi Hugo, bom dia.\nAté Logo.";
+        this.lista[1] = "Assunto: bom dia\n Olá, tudo bem.";
+        this.lista[2] = "Assunto: Promoção do shopOnline\nOlá, aluno\nA ShopOnline está com ótimas promoções\nvenha conferir!!!";
+        this.lista[3] = "Assunto: Pocote claro\nOlá, Boa tarde, aluno\nGostaria do de comprar o novo pacote da claro?\nNosas promoções:\n3G R$20,00 ao mês\n4G R$40,00 ao mês\n5G 60,00 ao mês";
+       
+        return this.lista[n];  
+    }
     
     //Comando de login
     public String user(Client pass){
@@ -34,46 +41,41 @@ public class Server {
     //Recebe como parâmetro o indice do email e a quantidade de linhas que deveraão ser mostradas
     public void top(int n, int x){
         int num = 0;
-        this.lista[0] = "Assunto: oi, como vai?\nOi Hugo, bom dia.\nAté Logo.";
-        this.lista[1] = "Assunto: bom dia\n Olá, tudo bem.";
-        this.lista[2] = "Assunto: Promoção do shopOnline\nOlá, aluno\nA ShopOnline está com ótimas promoções\nvenha conferir!!!";
         n = n - 1;
-        String[] array = this.lista[n].split("\n");
-        if (x == 0) {
-            System.out.println(this.lista[n]); 
-        }
-        else{
-            for (int i = 0; i < array.length; i++) {
-                num++;
+        if (n > 3|n < 1) {
+            System.out.println("-Err");
+        }else{
+            String[] array = emails(n).split("\n");
+            if (x == 0) {
+                System.out.println(this.lista[n]); 
             }
-            if (x > num) {
-                System.out.println("-Err excedeu o numero de linhas");
-            }
-            else if(x > 0){
-                System.out.println(array[0]);
-                for (int i = 1; i <= x; i++) {
-                    System.out.println(array[i]);
+            else{
+                for (int i = 0; i < array.length; i++) {
+                    num++;
+                }
+                if (x > num) {
+                    System.out.println("-Err excedeu o numero de linhas");
+                }
+                else if(x > 0){
+                    System.out.println(array[0]);
+                    for (int i = 1; i <= x; i++) {
+                        System.out.println(array[i]);
+                    }
                 }
             }
         }
-       
-        
     }
 
     public void list(){
-        this.lista[0] = "Assunto: oi, como vai?\nOi Hugo, bom dia.\nAté Logo.";
-        this.lista[1] = "Assunto: bom dia\n Olá, tudo bem.";
-        this.lista[2] = "Assunto: Promoção do shopOnline\nOlá, aluno\nA ShopOnline está com ótimas promoções\nvenha conferir!!!";
-       
-        for (int i = 0; i < this.lista.length; i++) {
-            String[] array = this.lista[i].split("\n");
+
+        for (int i = 0; i < 4; i++) {
+            String[] array = emails(i).split("\n");
             System.out.println(""+ (i+1) +" "+array[0]);
 
         }
         System.out.println(".");
-
-
     }
+   
 
 
 }
