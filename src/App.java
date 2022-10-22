@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 public class App {
     /**
      * @param args
@@ -11,38 +12,52 @@ public class App {
         boolean digitouUser = false;
         boolean logginAutorizado = false;
         boolean session = false;
-      
+        boolean pop = false;
+        
         try (Scanner input = new Scanner(System.in)) {
             
             Server s = new Server(); // instancia da classe server;
             Client c1 = new Client(); // instancia do cliente
             String comand = ""; // variável para utilizar os comando
+            
 
-           
-            s.list();
+
+           s.caixaDeEntrada(1);
+           s.list();
             while (true) {
                 comand = input.nextLine();
                 
                 String[] comandSplit = comand.split(" ");
-
+               
                 // comando com mais de 1 argumento
                 if (comandSplit.length > 1){
-
+                    
                     switch (comandSplit[0]){
                         case "telnet":
+                            if (!session) {
+                                if (comandSplit[1].equals(s.endereco)) {
+                                    if (comandSplit[2].equals(s.porta)) {
+                                        pop = true;
+                                        System.out.println("<POP3>");
+                                    }
+                                }
+                            }
                             break;
                         case "user":
-                            if(!session){
-                                if(!digitouUser){
-                                    c1.setUser(comandSplit[1]);
-                                    System.out.println(s.user(c1));
-                                    if (s.usuario.equals(comandSplit[1]))
-                                        digitouUser = true;
-                                }else{
-                                    System.out.println("Já existe um login sendo realizado");
-                                }
-                            }else
-                                System.out.println("Você já ta logado no sistema");
+                            if (pop) {
+                                if(!session){
+                                    if(!digitouUser){
+                                        c1.setUser(comandSplit[1]);
+                                        System.out.println(s.user(c1));
+                                        if (s.usuario.equals(comandSplit[1]))
+                                            digitouUser = true;
+                                    }else{
+                                        System.out.println("Já existe um login sendo realizado");
+                                    }
+                                }else
+                                    System.out.println("Você já ta logado no sistema");
+                            }
+                           
                             break;
                         case "pass":
                             if (!session){
@@ -63,14 +78,10 @@ public class App {
                             }
 
                             break;
-                        case "stat":
-                            // se for um comando que precisa de login verifique a sessao dele
-                            if(session){
-                                /*
-                                *
-                                * coloque a logica do stat aqui
-                                *
-                                * */
+                        case "retr":
+                            if (session) {
+                                int n = Integer.parseInt(comandSplit[1]);
+                                s.retr(n);
                             }
                             break;
                          /*
@@ -133,8 +144,14 @@ public class App {
                     if ("quit".equals(comand)) {
                         System.out.println("bye!");
                         break;
-                    }else if("".equals(comand)){
-                        //nada
+                    }else if("stat".equals(comand)){
+                        if(session){
+                            System.out.println(s.stat()); 
+                        }
+                    }else if ("list". equals(comand)) {
+                        if (session) {
+                            s.list();
+                        }
                     }
                     else{
                         System.out.println("Command not found");
