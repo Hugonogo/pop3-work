@@ -1,4 +1,3 @@
-import java.util.Scanner;
 public class App {
     /**
      * @param args
@@ -11,13 +10,15 @@ public class App {
         boolean digitouUser = false;
         boolean logginAutorizado = false;
         boolean session = false;
-
+      
         try (Scanner input = new Scanner(System.in)) {
             
-            Server s = new Server(); // instancia da classe server
+            Server s = new Server(); // instancia da classe server;
             Client c1 = new Client(); // instancia do cliente
             String comand = ""; // variável para utilizar os comando
 
+           
+            s.list();
             while (true) {
                 comand = input.nextLine();
                 
