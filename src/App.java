@@ -152,6 +152,9 @@ public class App {
                         if (session) {
                             s.list();
                         }
+                    }else if ("telnet".equals(comand) || "user".equals(comand) ||
+                            "pass".equals(comand) || "retr".equals(comand)){
+                        System.out.println("Command with syntax error, please digit help!");
                     }
                     else{
                         System.out.println("Command not found");
