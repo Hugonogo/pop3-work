@@ -6,13 +6,14 @@ public class App {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        System.out.println("WELCOME");
+        System.out.println("BEM-VINDO");
 
         // verificar se dgitou primeiro o user antes do pass
         boolean digitouUser = false;
         boolean logginAutorizado = false;
         boolean session = false;
         boolean pop = false;
+        String MSG_LOGIN = "Faça login antes de tentar acessar esse comando";
         
         try (Scanner input = new Scanner(System.in)) {
             
@@ -22,8 +23,7 @@ public class App {
             
 
 
-           s.caixaDeEntrada(1);
-           s.list();
+            s.carregarEmails();
             while (true) {
                 comand = input.nextLine();
                 
@@ -35,12 +35,22 @@ public class App {
                     switch (comandSplit[0]){
                         case "telnet":
                             if (!session) {
-                                if (comandSplit[1].equals(s.endereco)) {
-                                    if (comandSplit[2].equals(s.porta)) {
-                                        pop = true;
-                                        System.out.println("<POP3>");
+                                if(comandSplit.length == 3){
+                                    if (comandSplit[1].equals(s.endereco)) {
+                                        if (comandSplit[2].equals(s.porta)) {
+                                            pop = true;
+                                            System.out.println("<POP3> conectado");
+                                        }else{
+                                            System.out.println("Porta desconhecida pelo sistema");
+                                        }
+                                    }else {
+                                        System.out.println("Endereço desconhecido pelo sistema");
                                     }
+                                }else{
+                                    System.out.println("Comando 'telnet' precisa ser passado" +
+                                            " 2 argumentos, digite 'help' para ajuda");
                                 }
+
                             }
                             break;
                         case "user":
@@ -56,6 +66,10 @@ public class App {
                                     }
                                 }else
                                     System.out.println("Você já ta logado no sistema");
+                            }else{
+                                System.out.println("Primeiro você precisa testar a conectividade" +
+                                        " com uma porta de serviço com o comando 'telnet', digite" +
+                                        " 'help' para mais informações");
                             }
                            
                             break;
@@ -80,64 +94,30 @@ public class App {
                             break;
                         case "retr":
                             if (session) {
-                                int n = Integer.parseInt(comandSplit[1]);
-                                s.retr(n);
+                                try{
+                                    int n = Integer.parseInt(comandSplit[1]);
+                                    s.retr(n);
+                                }
+                                catch(Exception e){
+                                    System.out.println("Recebeu um argumento inválido, digite " +
+                                            "'help' para ajuda");
+                                }
+                            }else{
+                                System.out.println(MSG_LOGIN);
                             }
                             break;
                          /*
                          *
                          * adicione o restante dos comandos aqui
                          *
-                         * ex:
+                         * exemplo:
                          * case "comando":
                          *      # logica
                          *      break;
                          * */
                         default:
-                            System.out.println("Command not found");
+                            System.out.println("Comando não encontrado");
                     }
-
-                    /* //Verifica o Comando Telnet
-                    if (comandSplit[0].equals("telnet") && (comandSplit[1].equals(s.endereco) && (comandSplit[2].equals(s.porta)))) {
-                        System.out.println("<pop3 mail.com server>");
-                        comand = input.nextLine();
-                        // verificar comando user
-                        if ("user".equals(comandSplit[0])) {
-
-                            c1.setUser(comandSplit[1]);
-
-                            if (c1.getUser().equals(s.usuario)){
-                                System.out.println(s.user(c1));
-                                comand = input.next();
-                                comandSplit = comand.split(" ");
-                            }
-                            //verificar o comando pass
-                            if ("pass".equals(comandSplit[0])) {
-                                c1.setPassword(comandSplit[1]);
-                                if (c1.getPassword().equals(s.senha)){
-                                    System.out.println(s.pass(c1));
-                                    while (true) {
-                                        comand = input.nextLine();
-                                        if ("list".equals(comandSplit[0])) {
-                                            s.list();
-                                        }
-                                        if ("stat".equals(comandSplit[0])) {
-                                            System.out.println(s.stat());
-                                        }
-                                        if ("top".equals(comandSplit[0])) {
-                                            int n = Integer.parseInt(comandSplit[1]);
-                                            int x = Integer.parseInt(comandSplit[2]);
-                                            s.top(n, x);
-
-                                        }
-                                        if ("quit".equals(comand)) {
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }*/
                 }       // comandos com 1 argumento
                 else if(comandSplit.length == 1){
                     //verifique o comando quit
@@ -147,17 +127,37 @@ public class App {
                     }else if("stat".equals(comand)){
                         if(session){
                             System.out.println(s.stat()); 
+                        }else{
+                            System.out.println(MSG_LOGIN);
                         }
                     }else if ("list". equals(comand)) {
                         if (session) {
                             s.list();
+                        }else{
+                            System.out.println(MSG_LOGIN);
                         }
                     }else if ("telnet".equals(comand) || "user".equals(comand) ||
                             "pass".equals(comand) || "retr".equals(comand)){
-                        System.out.println("Command with syntax error, please digit help!");
+                        System.out.println("Comando '"+comand+"' com erro de sintaxe, digite 'help' para ajuda");
+                    }else if("help".equals(comand)){
+                        /*
+                        * um dos comandos mais importantes para a nossa aplicação pesso delicadesa
+                        * na hora de inseir novas informações, se possível, sempre revisar elas
+                        * */
+                        System.out.println(
+                        "comando | argumentos | descrição\n"+
+                        "telnet <serviço> <porta> -O comando telnet testa a conectividade" +
+                                " com uma porta de serviço. Através disso, pode ser" +
+                                " identificado se há algum bloqueio de rede na porta especificada.\n"+
+                        "user <user> -O comando user inicia o login do usuário requerindo o nome dele," +
+                                "o comando telnet é obrigatório antes.\n"+
+                        "pass <pass> -O comando pass recebe a senha do usuário informado " +
+                                "anteriormente pelo comando user."
+
+                        );
                     }
                     else{
-                        System.out.println("Command not found");
+                        System.out.println("Comando não encontrado");
                     }
                 }
             }
