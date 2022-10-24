@@ -152,7 +152,13 @@ public class App {
                         "user <user> -O comando user inicia o login do usuário requerindo o nome dele," +
                                 "o comando telnet é obrigatório antes.\n"+
                         "pass <pass> -O comando pass recebe a senha do usuário informado " +
-                                "anteriormente pelo comando user."
+                                "anteriormente pelo comando user.\n"+
+                        "list -mostra o indice dos emails da caixa postal e o seu tamanho,"+
+                                "o Loggin é obrigatório.\n"+
+                        "stat -mostra a quantidade de emails na caixa postal, "+
+                                "o loggin é obrigatório.\n"+
+                        "retr <InsiceDeEmail> -retorna o email inteiro do indice."
+                   
 
                         );
                     }
