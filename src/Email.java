@@ -16,9 +16,6 @@ public class Email {
         this.mensagem = mensagem;
         this.tamanho = tamanho;
     }
-
-    public Email() {
-    }
     
     public String getRemetente() {
         return remetente;
@@ -53,7 +50,7 @@ public class Email {
     }
     @Override
     public String toString() {
-        return "De: "+remetente+"// Para: "+destinatario+"\n Assunto"+assunto+"\n"+mensagem+"\n.";
+        return "\nDe: "+remetente+"// Para: "+destinatario+"\n Assunto"+assunto+"\n"+mensagem+"\n.";
     }
     
 }
