@@ -82,7 +82,8 @@ public class App {
                                     if (logginAutorizado){
                                         System.out.println("Loggin autorizado");
                                         session = true;
-                                        
+                                        s.carregarEmails();
+                                        c1.amazenarMailDoServe();
                                     }
                                     else
                                         System.out.println("Senha errada");
