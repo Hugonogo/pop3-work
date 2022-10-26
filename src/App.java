@@ -22,8 +22,9 @@ public class App {
             String comand = ""; // variável para utilizar os comando
             
 
+            
+            
 
-            s.carregarEmails();
             while (true) {
                 comand = input.nextLine();
                 
@@ -96,7 +97,7 @@ public class App {
                             if (session) {
                                 try{
                                     int n = Integer.parseInt(comandSplit[1]);
-                                    s.retr(n);
+                                    c1.retr(n);
                                 }
                                 catch(Exception e){
                                     System.out.println("Recebeu um argumento inválido, digite " +
@@ -126,13 +127,13 @@ public class App {
                         break;
                     }else if("stat".equals(comand)){
                         if(session){
-                            System.out.println(s.stat()); 
+                            System.out.println(c1.stat()); 
                         }else{
                             System.out.println(MSG_LOGIN);
                         }
                     }else if ("list". equals(comand)) {
                         if (session) {
-                            s.list();
+                            c1.list();
                         }else{
                             System.out.println(MSG_LOGIN);
                         }
