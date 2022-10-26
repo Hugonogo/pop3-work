@@ -82,6 +82,7 @@ public class App {
                                     if (logginAutorizado){
                                         System.out.println("Loggin autorizado");
                                         session = true;
+                                        
                                     }
                                     else
                                         System.out.println("Senha errada");
