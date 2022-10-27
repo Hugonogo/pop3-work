@@ -161,7 +161,8 @@ public class App {
                                 "o Loggin é obrigatório.\n"+
                         "stat -mostra a quantidade de emails na caixa postal, "+
                                 "o loggin é obrigatório.\n"+
-                        "retr <IndiceEmail> -retorna o email inteiro do indice."
+                        "retr <InsiceDeEmail> -retorna o email inteiro do indice.\n" +
+                        "quit - Digitando este comando você finaliza o programa."
                    
                         );
                     }
