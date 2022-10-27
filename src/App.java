@@ -163,7 +163,6 @@ public class App {
                                 "o loggin é obrigatório.\n"+
                         "retr <IndiceEmail> -retorna o email inteiro do indice."
                    
-
                         );
                     }
                     else{
