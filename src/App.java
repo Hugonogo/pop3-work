@@ -17,7 +17,7 @@ public class App {
         
         try (Scanner input = new Scanner(System.in)) {
             
-            Server s = new Server(); // instancia da classe server;
+            
             Client c1 = new Client(); // instancia do cliente
             String comand = ""; // variável para utilizar os comando
             
@@ -40,6 +40,7 @@ public class App {
                                     if (comandSplit[1].equals(s.endereco)) {
                                         if (comandSplit[2].equals(s.porta)) {
                                             pop = true;
+                                            Server s = new Server(); // instancia da classe server;
                                             System.out.println("<POP3> conectado");
                                         }else{
                                             System.out.println("Porta desconhecida pelo sistema");
