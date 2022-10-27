@@ -150,7 +150,7 @@ public class App {
                         * */
                         System.out.println(
                         "comando | argumentos | descrição\n"+
-                        "telnet <serviço> <porta> -O Para se conectar digite telnet pop.mail.com 110, o comando telnet testa a conectividade" +
+                        "telnet <serviço> <porta> -Para se conectar digite telnet pop.mail.com 110, o comando telnet testa a conectividade" +
                                 " com uma porta de serviço. Através disso, pode ser" +
                                 " identificado se há algum bloqueio de rede na porta especificada.\n"+
                         "user <user> -O comando user inicia o login do usuário requerindo o nome dele," +
