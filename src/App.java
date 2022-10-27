@@ -83,7 +83,7 @@ public class App {
                                         System.out.println("Loggin autorizado");
                                         session = true;
                                         s.carregarEmails();
-                                        c1.amazenarMailDoServe();
+                                        c1.amazenarMailDoServe(s.caixaDeEntrada();
                                     }
                                     else
                                         System.out.println("Senha errada");
