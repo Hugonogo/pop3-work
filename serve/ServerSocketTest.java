@@ -93,6 +93,7 @@ public class ServerSocketTest {
                                         if(command[1].equals(senha))
                                         {
                                             System.out.println("Serve: Senha ok");
+                                            System.out.println("Serve: Logado com sucesso");
                                             isLogado = true;
                                         }else
                                         {
