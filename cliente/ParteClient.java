@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import model.Email;
 
 public class ParteClient {
-
     /* Variáveis que vou receber do serve */
     static ObjectInputStream in;
     static List<Email> caixaPostalLocal;
@@ -23,22 +22,17 @@ public class ParteClient {
 
         try {
 
-            cliente = new Socket("0.0.0.0",3322);
+            cliente = new Socket("0.0.0.0", 110);
 
-            in = new ObjectInputStream(cliente.getInputStream());
-
-            caixaPostalLocal = (ArrayList<Email>) in.readObject();
 
             //isLogado = in.readBoolean();
 
         }catch (IOException ex){
             System.out.println(ex);
-        }catch( ClassNotFoundException e ){
-           System.out.println(e);
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException, ClassNotFoundException
     {
         initCliente();
         
@@ -49,11 +43,19 @@ public class ParteClient {
         String entrada = new Scanner(System.in).nextLine().toString();
         if(true && entrada.equals("list"))
         {
+            int cont = 1;
             for(Email e : caixaPostalLocal)
                 {
-                    System.out.println(e.toString());
+                    System.out.println(cont+" "+e.tamanho);
+                    cont++;
                 }
-       }
+            System.out.println(".");
+        }
+        if (true && entrada.equals("xxx")) {
+            in = new ObjectInputStream(cliente.getInputStream());
+
+            caixaPostalLocal = (ArrayList<Email>) in.readObject();
+        }
         
         try 
           {
@@ -68,4 +70,5 @@ public class ParteClient {
     
     }
     
+   
 }
