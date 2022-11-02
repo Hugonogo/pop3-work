@@ -12,6 +12,7 @@ import model.Email;
 public class ParteClient {
     /* Variáveis que vou receber do serve */
     static ObjectInputStream in;
+    static DataInputStream inmsg;
     static List<Email> caixaPostalLocal;
     static boolean isLogado = false; // padrão false até o server dizer que está
 
@@ -23,6 +24,10 @@ public class ParteClient {
         try {
 
             cliente = new Socket("0.0.0.0", 110);
+            inmsg = new DataInputStream(cliente.getInputStream());
+            if (inmsg.readBoolean() == true) {
+                System.out.println("Flamengo");
+            }
 
 
             //isLogado = in.readBoolean();
