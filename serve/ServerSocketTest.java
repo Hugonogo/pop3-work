@@ -15,7 +15,7 @@ public class ServerSocketTest {
 
      /* Variável de saída do serve */
     static ObjectOutputStream out;
-
+    static DataOutputStream saidamsg;
     /* Dados estáticos simulando um banco do serve*/
     static boolean isLogado = false;
     static boolean inseriuNome = false;
@@ -63,7 +63,8 @@ public class ServerSocketTest {
             
             Socket cliente = server.accept();
             System.out.println("Cliente conectado do IP "+cliente.getInetAddress().getHostAddress());
-            
+            saidamsg = new DataOutputStream(cliente.getOutputStream());
+            saidamsg.writeBoolean(true);
             
            
             //out.writeBoolean(isLogado);
