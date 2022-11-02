@@ -13,7 +13,7 @@ import model.Email;
  
 public class ServerSocketTest {
 
-    /* Variável de saída do serve */
+     /* Variável de saída do serve */
     static ObjectOutputStream out;
 
     /* Dados estáticos simulando um banco do serve*/
@@ -29,21 +29,24 @@ public class ServerSocketTest {
             "primeiro",
             "primeiro email",
             "hugo",
-            "gustavo"
+            "gustavo",
+            "1234KB"
         ));
 
         caixaPostal.add(new Email(
             "segundo emails",
             "ual esse é um segundo email",
             "hugo",
-            "gustavo"
+            "gustavo",
+            "2000KB"
         ));
 
         caixaPostal.add(new Email(
             "terceiro email",
             "ta recebendo meus e-mails hugo?",
             "hugo",
-            "gustavo"
+            "gustavo",
+            "1000KB"
         ));
 
     }
@@ -54,17 +57,15 @@ public class ServerSocketTest {
 
         try {
 
-            ServerSocket server = new ServerSocket(3322);                       
-            System.out.println("Servidor iniciado na porta 3322");
+            ServerSocket server = new ServerSocket(110);                       
+            System.out.println("Servidor iniciado na porta 110");
 
             
             Socket cliente = server.accept();
-            System.out.println("Cliente conectado do IP "+cliente.getInetAddress().
-                    getHostAddress());
+            System.out.println("Cliente conectado do IP "+cliente.getInetAddress().getHostAddress());
             
             
-            out = new ObjectOutputStream(cliente.getOutputStream());
-            out.writeObject(caixaPostal);
+           
             //out.writeBoolean(isLogado);
             
             Scanner entrada = new Scanner(cliente.getInputStream());
@@ -107,23 +108,19 @@ public class ServerSocketTest {
                                 default:
                                     System.out.println("Serve: Comando desconhecido");
                             }
-                    }else 
+                    } 
+                      
+                
+                      
+                    if(isLogado)
                     {   
-                        if (command[0].equals("list"))
-                        {   
-                            if(isLogado)
-                            {   
-                                caixaPostal.clear(); // limpar do serve
-                            }else
-                            {
-                                System.out.println("Serve: Comando precisa de um usuário logado");
-                            }
-                        }else
-                        {
-                            System.out.println("Serve: Comando inválido!");
-                        }
-                        
+                        out = new ObjectOutputStream(cliente.getOutputStream());
+                        out.writeObject(caixaPostal);
+                        caixaPostal.clear(); // limpar do serve
                     }
+                           
+                        
+                    
             }
             
             entrada.close();
@@ -134,5 +131,4 @@ public class ServerSocketTest {
         }
         
     }
-    
 }
