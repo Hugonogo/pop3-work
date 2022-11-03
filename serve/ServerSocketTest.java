@@ -122,7 +122,7 @@ public class ServerSocketTest {
                         List<String> comandosConhecidos = new ArrayList<>();
                         comandosConhecidos.add("user");
                         comandosConhecidos.add("pass");
-                        
+                        comandosConhecidos.add("retr");
 
                         if ( command[0].equals("list") ) 
                         {

@@ -76,15 +76,23 @@ public class ParteClient {
             System.out.println(".");
         }
         if (isLogado && command[0].equals("retr") && command.length > 1) {
-            int n = Integer.parseInt(command[1]);
-            n--;
-            if (n < caixaPostalLocal.size()) {
-                System.out.println(caixaPostalLocal.get(n).toString());    
+            try
+            {
+                int n = Integer.parseInt(command[1]);
+                n--;
+                if (n < caixaPostalLocal.size()) {
+                    System.out.println(caixaPostalLocal.get(n).toString());    
 
-            }else{
-                n++;
-                System.out.println("Email "+n+" não existe");
+                }else{
+                    n++;
+                    System.out.println("Email "+n+" não existe");
+                }
+            }catch(Exception e)
+            {
+                System.out.println("Argumento inválido!");
             }
+
+            
             
         }
     

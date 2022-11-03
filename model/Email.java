@@ -19,7 +19,7 @@ public class Email implements Serializable{
 
     @Override
     public String toString() {
-        return "\nDe: "+sender+"// Para: "+to+"\n Assunto: "+tittle+"\n"+msg+"\n.";
+        return "\nDe: "+sender+"// Para: "+to+"\nAssunto: "+tittle+"\nMenssagem: "+msg+"\n.";
     }
 
     public String getTamanho() {
