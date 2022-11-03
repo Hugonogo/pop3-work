@@ -18,6 +18,7 @@ public class ParteClient {
    static DataInputStream inmsg;
    static List<Email> caixaPostalLocal;
    static boolean isLogado = false; // padrão false até o server dizer que está 
+   static boolean session = false;
    
 
    static Socket cliente;
@@ -34,8 +35,9 @@ public class ParteClient {
    public static void main(String[] args) throws IOException, ClassNotFoundException
    {
        initCliente();
-
+        System.out.println("Faça Login Para acessar os emails!");
        /*Pega a caixa postal do cliente antes de logar mas não exibe */
+
        in = new ObjectInputStream(cliente.getInputStream());
        caixaPostalLocal = (ArrayList<Email>) in.readObject();
        
@@ -45,13 +47,21 @@ public class ParteClient {
 
         String entrada = new Scanner(System.in).nextLine().toString();
         String[] command = entrada.split(" ");
-        if (command[0].equals("pass")) 
-        {
-        inmsg = new DataInputStream(cliente.getInputStream());
-            if (inmsg.readBoolean() == true) 
-            {
-                isLogado = true;
+        if (!session) {
+            if (!isLogado) {
+                if (command[0].equals("pass")) 
+                {
+                    inmsg = new DataInputStream(cliente.getInputStream());
+                        if (inmsg.readBoolean() == true) 
+                        {
+                            isLogado = true;
+                            System.out.println("Logado com sucesso");
+                            session  = true;
+                        }
+                }
             }
+                
+            
         }
         
         if(isLogado && entrada.equals("list"))
@@ -64,7 +74,19 @@ public class ParteClient {
                     cont++;
                 }
             System.out.println(".");
-        }   
+        }
+        if (isLogado && command[0].equals("retr") && command.length > 1) {
+            int n = Integer.parseInt(command[1]);
+            n--;
+            if (n < caixaPostalLocal.size()) {
+                System.out.println(caixaPostalLocal.get(n).toString());    
+
+            }else{
+                n++;
+                System.out.println("Email "+n+" não existe");
+            }
+            
+        }
     
        try 
          {
@@ -78,5 +100,4 @@ public class ParteClient {
       }
    
    }
-    
 }
