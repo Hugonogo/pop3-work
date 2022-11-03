@@ -22,4 +22,9 @@ public class Email implements Serializable{
         return "\nDe: "+sender+"// Para: "+to+"\n Assunto: "+tittle+"\n"+msg+"\n.";
     }
 
+    public String getTamanho() {
+        return tamanho+" KB's";
+    }
+
+    
 }
