@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ public class ServerSocketTest {
      /* Variável de saída do serve */
      static ObjectOutputStream out;
      static DataOutputStream saidamsg;
+
      /* Dados estáticos simulando um banco do serve*/
      static boolean isLogado = false;
      static boolean inseriuNome = false;
@@ -31,7 +33,7 @@ public class ServerSocketTest {
              "primeiro email",
              "hugo",
              "gustavo",
-             "1234KB"
+             "1234"
          ));
  
          caixaPostal.add(new Email(
@@ -39,7 +41,7 @@ public class ServerSocketTest {
              "ual esse é um segundo email",
              "hugo",
              "gustavo",
-             "2000KB"
+             "2000"
          ));
  
          caixaPostal.add(new Email(
@@ -47,7 +49,7 @@ public class ServerSocketTest {
              "ta recebendo meus e-mails hugo?",
              "hugo",
              "gustavo",
-             "1000KB"
+             "1000"
          ));
  
      }
@@ -58,8 +60,8 @@ public class ServerSocketTest {
  
          try {
  
-             ServerSocket server = new ServerSocket(110);                       
-             System.out.println("Servidor iniciado na porta 110");
+             ServerSocket server = new ServerSocket(1100);                       
+             System.out.println("Servidor iniciado na porta 1100");
  
              
              Socket cliente = server.accept();
@@ -70,7 +72,7 @@ public class ServerSocketTest {
              
              out = new ObjectOutputStream(cliente.getOutputStream());
              out.writeObject(caixaPostal);
-             //out.writeBoolean(isLogado);
+             caixaPostal.clear(); // limpar do serve
              
              Scanner entrada = new Scanner(cliente.getInputStream());
              while(entrada.hasNextLine()){
@@ -110,21 +112,31 @@ public class ServerSocketTest {
                                      }
                                  break;
                                  default:
-                                     System.out.println("Serve: Comando desconhecido");
+                                 System.out.println("Serve: Comando desconhecido");
                              }
-                     } 
-                       
-                 
-                       
-                     if(isLogado)
-                     {   
-                        
-                        caixaPostal.clear(); // limpar do serve
                      }
-                            
-                         
-                     
-             }
+                     else
+                     {
+                        List<String> comandosConhecidos = new ArrayList<>();
+                        comandosConhecidos.add("user");
+                        comandosConhecidos.add("pass");
+                        comandosConhecidos.add("retr");
+
+                        if ( command[0].equals("list") ) 
+                        {
+                            if ( isLogado )
+                            System.out.println("Serve: Comando list..");
+                            else
+                            System.out.println("Serve: Login não autorizado para o comando list..");
+                        }
+                        else if ( comandosConhecidos.contains(command[0]) )
+                            System.out.println("Serve: Comando escrito de forma incorreta..");
+                        else
+                            System.out.println("Serve: Comando inválido");
+                        
+                     }
+                                           
+            }
              
              entrada.close();
              server.close();
