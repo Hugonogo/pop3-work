@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.List;
+import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +26,7 @@ public class ParteClient {
 
        try {
 
-           cliente = new Socket("0.0.0.0", 110);
+           cliente = new Socket("0.0.0.0", 1100);
            
 
 
@@ -42,34 +45,31 @@ public class ParteClient {
       while(true)
       {
 
-       String entrada = new Scanner(System.in).nextLine().toString();
-       String[] command = entrada.split(" ");
-       if (command[0].equals("pass")) {
+        String entrada = new Scanner(System.in).nextLine().toString();
+        String[] command = entrada.split(" ");
+        if (command[0].equals("pass")) 
+        {
         inmsg = new DataInputStream(cliente.getInputStream());
-        if (inmsg.readBoolean() == true) {
-            isLogado = true;
-            
-        }
-       }
-       if (isLogado) {
-             if(entrada.equals("list"))
+            if (inmsg.readBoolean() == true) 
             {
-                int cont = 1;
-                for(Email e : caixaPostalLocal)
-                    {
-                        System.out.println(cont+" "+e.tamanho);
-                        cont++;
-                    }
-                System.out.println(".");
+                isLogado = true;
             }
-            if (entrada.equals("xxx")) {
-                in = new ObjectInputStream(cliente.getInputStream());
+        }
+        
+        if(isLogado && entrada.equals("list"))
+        {
+            in = new ObjectInputStream(cliente.getInputStream());
+            caixaPostalLocal = (ArrayList<Email>) in.readObject();
 
-                caixaPostalLocal = (ArrayList<Email>) in.readObject();
-            }
-       }
-      
-       
+            int cont = 1;
+            for(Email e : caixaPostalLocal)
+                {
+                    System.out.println(cont+" "+e.getTamanho());
+                    cont++;
+                }
+            System.out.println(".");
+        }   
+    
        try 
          {
              PrintStream saida = new PrintStream(cliente.getOutputStream());
