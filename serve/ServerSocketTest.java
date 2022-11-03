@@ -27,7 +27,7 @@ public class ServerSocketTest {
      static ArrayList<Email> caixaPostal = new ArrayList<>();
  
      /* add emails fakes */
-     public static void loadEmailsForServe(){
+     public static ArrayList loadEmailsForServe(){
          caixaPostal.add(new Email(
              "primeiro",
              "primeiro email",
@@ -51,12 +51,10 @@ public class ServerSocketTest {
              "gustavo",
              "1000"
          ));
- 
+    return caixaPostal;
      }
  
      public static void main(String args[]){
- 
-         loadEmailsForServe(); // Simula o carregamento dos e-mails para o serve
  
          try {
  
@@ -67,12 +65,12 @@ public class ServerSocketTest {
              Socket cliente = server.accept();
              System.out.println("Cliente conectado do IP "+cliente.getInetAddress().getHostAddress());
              
+             out = new ObjectOutputStream(cliente.getOutputStream());
+             out.writeObject(loadEmailsForServe()); /* Simula o carregamento dos e-mails para o serve */
+             caixaPostal.clear(); /* limpar do serve */
+
              saidamsg = new DataOutputStream(cliente.getOutputStream());
              saidamsg.writeBoolean(true);
-             
-             out = new ObjectOutputStream(cliente.getOutputStream());
-             out.writeObject(caixaPostal);
-             caixaPostal.clear(); // limpar do serve
              
              Scanner entrada = new Scanner(cliente.getInputStream());
              while(entrada.hasNextLine()){

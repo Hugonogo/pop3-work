@@ -25,13 +25,7 @@ public class ParteClient {
    private static void  initCliente(){
 
        try {
-
            cliente = new Socket("0.0.0.0", 1100);
-           
-
-
-           //isLogado = in.readBoolean();
-
        }catch (IOException ex){
            System.out.println(ex);
        }
@@ -40,6 +34,10 @@ public class ParteClient {
    public static void main(String[] args) throws IOException, ClassNotFoundException
    {
        initCliente();
+
+       /*Pega a caixa postal do cliente antes de logar mas não exibe */
+       in = new ObjectInputStream(cliente.getInputStream());
+       caixaPostalLocal = (ArrayList<Email>) in.readObject();
        
       /* Entrada do usuario */
       while(true)
@@ -58,8 +56,6 @@ public class ParteClient {
         
         if(isLogado && entrada.equals("list"))
         {
-            in = new ObjectInputStream(cliente.getInputStream());
-            caixaPostalLocal = (ArrayList<Email>) in.readObject();
 
             int cont = 1;
             for(Email e : caixaPostalLocal)
