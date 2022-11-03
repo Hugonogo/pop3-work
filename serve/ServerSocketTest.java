@@ -14,8 +14,7 @@ import model.Email;
 
  
 public class ServerSocketTest {
-
-     /* Variável de saída do serve */
+ /* Variável de saída do serve */
      static ObjectOutputStream out;
      static DataOutputStream saidamsg;
 
@@ -109,6 +108,11 @@ public class ServerSocketTest {
                                          System.out.println("Serve: Insira user primeiro");
                                      }
                                  break;
+                                 case "retr":
+                                     if (isLogado) {
+                                        System.out.println("Serve: Comando retr...");
+                                     }else  System.out.println("Serve: Login não autorizado para o comando retr...");
+                                 break;
                                  default:
                                  System.out.println("Serve: Comando desconhecido");
                              }
@@ -118,17 +122,17 @@ public class ServerSocketTest {
                         List<String> comandosConhecidos = new ArrayList<>();
                         comandosConhecidos.add("user");
                         comandosConhecidos.add("pass");
-                        comandosConhecidos.add("retr");
+                        
 
                         if ( command[0].equals("list") ) 
                         {
                             if ( isLogado )
-                            System.out.println("Serve: Comando list..");
+                            System.out.println("Serve: Comando list...");
                             else
-                            System.out.println("Serve: Login não autorizado para o comando list..");
+                            System.out.println("Serve: Login não autorizado para o comando list...");
                         }
                         else if ( comandosConhecidos.contains(command[0]) )
-                            System.out.println("Serve: Comando escrito de forma incorreta..");
+                            System.out.println("Serve: Comando escrito de forma incorreta...");
                         else
                             System.out.println("Serve: Comando inválido");
                         
