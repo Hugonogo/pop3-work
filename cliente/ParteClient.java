@@ -143,7 +143,10 @@ public class ParteClient {
                             }
                         }
                         }
-                        System.out.println("Porta inválida!");
+                        else
+                        {
+                            System.out.println("Porta inválida!");
+                        } 
                     }
                     else
                     {
