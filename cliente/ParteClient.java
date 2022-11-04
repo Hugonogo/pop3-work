@@ -21,6 +21,7 @@ public class ParteClient {
     static boolean isLogado = false; // padrão false até o server dizer que está 
     static boolean session = false;
     static boolean isUser = false;
+    static boolean isQuit = false;
  
     static Socket cliente;
  
@@ -38,7 +39,7 @@ public class ParteClient {
         
         Scanner firstCommand = new Scanner(System.in);
 
-        while(true)
+        while(!isQuit)
         {
             /* Comando telnet para fazer a conexão com o servidor  */
             String[] commandf = firstCommand.nextLine().split(" ");
@@ -96,6 +97,8 @@ public class ParteClient {
                             }
                             
                             if (command[0].equals("quit")) {
+                            cliente.close();
+                            isQuit = true;
                             System.out.println("Bye");
                             break;
                             }
