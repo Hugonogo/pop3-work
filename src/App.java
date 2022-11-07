@@ -1,176 +1,170 @@
+package cliente;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class App {
-    /**
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        System.out.println("BEM-VINDO");
 
-        // verificar se dgitou primeiro o user antes do pass
-        boolean digitouUser = false;
-        boolean logginAutorizado = false;
-        boolean session = false;
-        boolean pop = false;
-        String MSG_LOGIN = "Faça login antes de tentar acessar esse comando";
+public class Client {
+
+    /* Variáveis que vou receber do serve */
+    static ObjectInputStream in;
+    static DataInputStream inmsg;
+    static List<Email> caixaPostalLocal;
+    static boolean isLogado = false; // padrão false até o server dizer que está 
+    static boolean session = false;
+    static boolean isUser = false;
+    static boolean isQuit = false;
+ 
+    static Socket cliente;
+ 
+    private static void  initCliente(){
+ 
+        try {
+            cliente = new Socket("0.0.0.0", 1100);
+        }catch (IOException ex){
+            System.out.println(ex);
+        }
+    }
+ 
+    public static void main(String[] args) throws IOException, ClassNotFoundException
+    {
         
-        try (Scanner input = new Scanner(System.in)) {
-            
-            
-            Client c1 = new Client(); // instancia do cliente
-            String comand = ""; // variável para utilizar os comando
-            
+        Scanner firstCommand = new Scanner(System.in);
 
-            
-            
+        while(!isQuit)
+        {
+            /* Comando telnet para fazer a conexão com o servidor  */
+            String[] commandf = firstCommand.nextLine().split(" ");
 
-            while (true) {
-                comand = input.nextLine();
-                
-                String[] comandSplit = comand.split(" ");
-               
-                // comando com mais de 1 argumento
-                if (comandSplit.length > 1){
-                    
-                    switch (comandSplit[0]){
-                        case "telnet":
+            if( commandf.length > 2)
+            {   
+                if (commandf[0].equals("telnet"))
+                {   /* valida o host corretamente */
+                    if(commandf[1].equals("0.0.0.0"))
+                    {   /* valida a porta correta */
+                        if (commandf[2].equals("1100"))
+                        {   /* Se a porta e o host estiverem corretos inicia a aplicação do cliente */
+                            System.out.println("\n\n+OK pronto\n\n");
+
+                            initCliente();
+                            System.out.println("Bem-vindo\nFaça Login Para acessar os emails!\nPrimeiro insira o user e em seguida sua sennha!");
+                        /*Pega a caixa postal do cliente antes de logar mas não exibe */
+
+                        in = new ObjectInputStream(cliente.getInputStream());
+                        caixaPostalLocal = (ArrayList<Email>) in.readObject();
+                        
+                        /* Entrada do usuario */
+                        while(true)
+                        {
+
+                            String entrada = new Scanner(System.in).nextLine().toString();
+                            String[] command = entrada.split(" ");
                             if (!session) {
-                                if(comandSplit.length == 3){
-                                    if (comandSplit[1].equals(s.endereco)) {
-                                        if (comandSplit[2].equals(s.porta)) {
-                                            pop = true;
-                                            Server s = new Server(); // instancia da classe server;
-                                            System.out.println("<POP3> conectado");
-                                        }else{
-                                            System.out.println("Porta desconhecida pelo sistema");
-                                        }
-                                    }else {
-                                        System.out.println("Endereço desconhecido pelo sistema");
-                                    }
-                                }else{
-                                    System.out.println("Comando 'telnet' precisa ser passado" +
-                                            " 2 argumentos, digite 'help' para ajuda");
+                            if (!isLogado) {
+                                if (isUser) {
+                                    if (command[0].equals("pass") && command[1].equals("123@45")) 
+                                    {
+                                        inmsg = new DataInputStream(cliente.getInputStream());
+                                            if (inmsg.readBoolean() == true) 
+                                            {
+                                                isLogado = true;
+                                                System.out.println("Logado com sucesso");
+                                                session  = true;
+                                            }
+                                    }else System.out.println("ERRO");
                                 }
-
                             }
+                            }
+                            if (!session) {
+                                if (!isLogado) {
+                                if (!isUser) {
+                                    if (command[0].equals("user") && command[1].equals("aluno")) {
+                                        System.out.println("user Ok");
+                                        isUser = true;
+                                    }else System.out.println("ERRO");
+                                }
+                                    
+                                }
+                    
+                            }
+                            
+                            if (command[0].equals("quit")) {
+                            cliente.close();
+                            isQuit = true;
+                            System.out.println("Bye");
                             break;
-                        case "user":
-                            if (pop) {
-                                if(!session){
-                                    if(!digitouUser){
-                                        c1.setUser(comandSplit[1]);
-                                        System.out.println(s.user(c1));
-                                        if (s.usuario.equals(comandSplit[1]))
-                                            digitouUser = true;
+                            }
+                            
+                            if(isLogado && entrada.equals("list"))
+                            {
+
+                                int cont = 1;
+                                for(Email e : caixaPostalLocal)
+                                    {
+                                        System.out.println(cont+" "+e.getTamanho());
+                                        cont++;
+                                    }
+                                System.out.println(".");
+                            }
+                            if (isLogado && command[0].equals("retr") && command.length > 1) {
+                                try
+                                {
+                                    int n = Integer.parseInt(command[1]);
+                                    n--;
+                                    if (n < caixaPostalLocal.size()) {
+                                        System.out.println(caixaPostalLocal.get(n).toString());    
+
                                     }else{
-                                        System.out.println("Já existe um login sendo realizado");
+                                        n++;
+                                        System.out.println("Email "+n+" não existe");
                                     }
-                                }else
-                                    System.out.println("Você já ta logado no sistema");
-                            }else{
-                                System.out.println("Primeiro você precisa testar a conectividade" +
-                                        " com uma porta de serviço com o comando 'telnet', digite" +
-                                        " 'help' para mais informações");
-                            }
-                           
-                            break;
-                        case "pass":
-                            if (!session){
-                                if(digitouUser){
-                                    c1.setPassword(comandSplit[1]);
-                                    logginAutorizado = s.pass(c1);
-                                    if (logginAutorizado){
-                                        System.out.println("Loggin autorizado");
-                                        session = true;
-                                        s.carregarEmails();
-                                        c1.amazenarMailDoServe(s.caixaDeEntrada();
-                                    }
-                                    else
-                                        System.out.println("Senha errada");
-                                }else{
-                                    System.out.println("Insira um usuário primeiro");
+                                }catch(Exception e)
+                                {
+                                    System.out.println("Argumento inválido!");
                                 }
-                            }else{
-                                System.out.println("Você já ta logado no sistema");
+                            
+                                
+                                
                             }
-
-                            break;
-                        case "retr":
-                            if (session) {
-                                try{
-                                    int n = Integer.parseInt(comandSplit[1]);
-                                    c1.retr(n);
-                                }
-                                catch(Exception e){
-                                    System.out.println("Recebeu um argumento inválido, digite " +
-                                            "'help' para ajuda");
-                                }
-                            }else{
-                                System.out.println(MSG_LOGIN);
+                        
+                        try 
+                            {
+                                PrintStream saida = new PrintStream(cliente.getOutputStream());
+                                saida.println(entrada);
+                            } 
+                            catch (IOException ex) 
+                            {
+                                System.out.println(ex);
                             }
-                            break;
-                         /*
-                         *
-                         * adicione o restante dos comandos aqui
-                         *
-                         * exemplo:
-                         * case "comando":
-                         *      # logica
-                         *      break;
-                         * */
-                        default:
-                            System.out.println("Comando não encontrado");
-                    }
-                }       // comandos com 1 argumento
-                else if(comandSplit.length == 1){
-                    //verifique o comando quit
-                    if ("quit".equals(comand)) {
-                        System.out.println("bye!");
-                        break;
-                    }else if("stat".equals(comand)){
-                        if(session){
-                            System.out.println(c1.stat()); 
-                        }else{
-                            System.out.println(MSG_LOGIN);
                         }
-                    }else if ("list". equals(comand)) {
-                        if (session) {
-                            c1.list();
-                        }else{
-                            System.out.println(MSG_LOGIN);
                         }
-                    }else if ("telnet".equals(comand) || "user".equals(comand) ||
-                            "pass".equals(comand) || "retr".equals(comand)){
-                        System.out.println("Comando '"+comand+"' com erro de sintaxe, digite 'help' para ajuda");
-                    }else if("help".equals(comand)){
-                        /*
-                        * um dos comandos mais importantes para a nossa aplicação pesso delicadesa
-                        * na hora de inseir novas informações, se possível, sempre revisar elas
-                        * */
-                        System.out.println(
-                        "comando | argumentos | descrição\n"+
-                        "telnet <serviço> <porta> -Para se conectar digite telnet pop.mail.com 110, o comando telnet testa a conectividade" +
-                                " com uma porta de serviço. Através disso, pode ser" +
-                                " identificado se há algum bloqueio de rede na porta especificada.\n"+
-                        "user <user> -O comando user inicia o login do usuário requerindo o nome dele," +
-                                "o comando telnet é obrigatório antes.\n"+
-                        "pass <pass> -O comando pass recebe a senha do usuário informado " +
-                                "anteriormente pelo comando user.\n"+
-                        "list -mostra o indice dos emails da caixa postal e o seu tamanho,"+
-                                "o Loggin é obrigatório.\n"+
-                        "stat -mostra a quantidade de emails na caixa postal, "+
-                                "o loggin é obrigatório.\n"+
-                        "retr <InsiceDeEmail> -retorna o email inteiro do indice.\n" +
-                        "quit - Digitando este comando você finaliza o programa."
-                   
-                        );
+                        else
+                        {
+                            System.out.println("Porta inválida!");
+                        } 
                     }
-                    else{
-                        System.out.println("Comando não encontrado");
+                    else
+                    {
+                        System.out.println("Host inválido!");
                     }
                 }
+                else
+                {
+                    System.out.println("Comando inválido ou indisponível no momento!");
+                }
+            }
+            else
+            {
+                System.out.println("Inicie com o comando telnet corretamente!");
             }
         }
+    
     }
 }
