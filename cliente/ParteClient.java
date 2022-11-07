@@ -52,9 +52,9 @@ public class ParteClient {
                     {   /* valida a porta correta */
                         if (commandf[2].equals("1100"))
                         {   /* Se a porta e o host estiverem corretos inicia a aplicação do cliente */
-                            System.out.println("\n\n+OK pronto\n\n");
-
+                            
                             initCliente();
+                            System.out.println("\n\n+OK pronto\n\n");
                             System.out.println("Bem-vindo\nFaça Login Para acessar os emails!\nPrimeiro insira o user e em seguida sua sennha!");
                         /*Pega a caixa postal do cliente antes de logar mas não exibe */
 
